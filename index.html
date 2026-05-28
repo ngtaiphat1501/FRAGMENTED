@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FRAGMENTED — GDD Companion App</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+</head>
+<body class="crt-filter">
+    <!-- CRT screen flicker and scanlines overlay -->
+    <div class="scanlines"></div>
+    <div class="flicker"></div>
+    
+    <header class="app-header">
+        <div class="header-logo">
+            <span class="glitch-text" data-text="FRAGMENTED">FRAGMENTED</span>
+            <span class="version-tag">DOCS.V1.0.0</span>
+        </div>
+        <div class="header-status">
+            <span class="status-indicator-dot pulse"></span>
+            <span class="status-text">HỆ THỐNG: BẤT ỔN (TRAUMA: <span id="trauma-value-header">0%</span>)</span>
+        </div>
+    </header>
+
+    <div class="app-layout">
+        <!-- Sidebar Controls -->
+        <aside class="app-sidebar">
+            <!-- Project Cover Art -->
+            <div class="sidebar-widget cover-widget">
+                <h3>BẢN VẼ CONCEPT</h3>
+                <div class="concept-art-container">
+                    <img id="concept-img" src="fragmented_cover.png" alt="Fragmented Cover Art" onerror="this.src='https://picsum.photos/id/1067/600/400?grayscale'">
+                </div>
+            </div>
+
+            <!-- Audio Deck (Web Audio API Synthesizer) -->
+            <div class="sidebar-widget audio-widget">
+                <h3>BỘ PHÁT ÂM THANH ĐỘNG</h3>
+                <p class="widget-desc">Mô phỏng nhạc nền và dải tần số Trauma của dự án.</p>
+                <div class="audio-controls">
+                    <button id="btn-ambient" class="btn-horror">
+                        <span class="btn-icon">🔊</span> BẬT ÂM NỀN (40Hz Drone)
+                    </button>
+                    <button id="btn-radio" class="btn-horror">
+                        <span class="btn-icon">📻</span> TIẾNG RÈ RADIO (Static)
+                    </button>
+                    <button id="btn-piano" class="btn-horror">
+                        <span class="btn-icon">🎹</span> PHÁT PHÍM ĐÀN PIANO
+                    </button>
+                </div>
+                <div class="slider-group">
+                    <label for="slider-volume">ÂM LƯỢNG TỔNG:</label>
+                    <input type="range" id="slider-volume" min="0" max="1" step="0.05" value="0.5">
+                </div>
+            </div>
+
+            <!-- Trauma Control Panel -->
+            <div class="sidebar-widget trauma-widget">
+                <h3>TRÌNH GIẢ LẬP TRAUMA (CHẤN THƯƠNG)</h3>
+                <p class="widget-desc">Kéo thanh trượt để thay đổi mức độ hoảng loạn của giao diện và âm thanh.</p>
+                <div class="slider-group">
+                    <div class="slider-labels">
+                        <span>BÌNH TĨNH</span>
+                        <span id="slider-trauma-val">0%</span>
+                        <span>ĐIÊN LOẠN</span>
+                    </div>
+                    <input type="range" id="slider-trauma" min="0" max="100" step="1" value="0">
+                </div>
+            </div>
+
+            <!-- Combat Simulator -->
+            <div class="sidebar-widget combat-widget">
+                <h3>BẢN MÔ PHỎNG PARRY TIMING</h3>
+                <p class="widget-desc">Dev/Design kiểm thử khung đỡ đòn 6-frames chính xác.</p>
+                <div class="combat-arena">
+                    <div class="hit-indicator" id="hit-indicator">ĐỢI ĐÒN ĐÁNH...</div>
+                    <div class="fighter-container">
+                        <div class="enemy-sprite" id="enemy-sprite">👹</div>
+                        <div class="player-sprite" id="player-sprite">🛡️</div>
+                    </div>
+                    <div class="frame-bar">
+                        <div class="frame-pointer" id="frame-pointer"></div>
+                    </div>
+                </div>
+                <button id="btn-combat-attack" class="btn-horror btn-crimson">KẺ ĐỊCH RA CHIÊU!</button>
+                <button id="btn-combat-parry" class="btn-horror" disabled>NHẤN ĐỂ PARRY [Q]</button>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="app-main">
+            <!-- Navigation Tabs -->
+            <nav class="doc-tabs">
+                <button class="tab-link active" data-chapter="01">1. TÓM TẮT DỰ AN</button>
+                <button class="tab-link" data-chapter="02">2. CƠ CHẾ GAMEPLAY</button>
+                <button class="tab-link" data-chapter="03">3. THIẾT KẾ MÀN CHƠI</button>
+                <button class="tab-link" data-chapter="04">4. KỊCH BẢN ĐIỆN ẢNH</button>
+                <button class="tab-link" data-chapter="05">5. MỸ THUẬT & ÂM THANH</button>
+                <button class="tab-link" data-chapter="06">6. KIẾN TRÚC KỸ THUẬT</button>
+            </nav>
+
+            <!-- Document Display Panel -->
+            <div class="doc-display-panel" id="doc-content">
+                <!-- Content injected dynamically via main.js -->
+                <div class="loading-spinner">ĐANG TẢI DỮ LIỆU BÁO CÁO...</div>
+            </div>
+
+            <!-- Inverted Gravity Simulator (Shown inside Level Design chapter interactively) -->
+            <div id="gravity-sim-holder" style="display: none;">
+                <div class="gravity-sim-container">
+                    <h4>GIẢ LẬP ĐẢO CHIỀU TRỌNG LỰC (CHAPTER 2 MECHANIC)</h4>
+                    <p class="sim-desc">Nhấp nút bên dưới để đổi chiều map và tìm lối ra bí mật.</p>
+                    <div class="gravity-arena" id="gravity-arena">
+                        <div class="sim-player" id="sim-player">👤</div>
+                        <div class="sim-block obstacle-floor">SÀN NHÀ (ĐẤT)</div>
+                        <div class="sim-block obstacle-roof">TRẦN NHÀ (KHÔNG GIAN ẨN)</div>
+                        <div class="sim-exit">🚪 LỐI RA BỊ KHÓA</div>
+                    </div>
+                    <button id="btn-rotate-gravity" class="btn-horror btn-crimson">ĐẢO CHIỀU KHÔNG GIAN [R]</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <footer class="app-footer">
+        <p>© 2026 FRAGMENTED Project GDD. Bản báo cáo thiết kế kỹ thuật bảo mật cao. Phòng phát triển & mỹ thuật.</p>
+    </footer>
+
+    <script src="main.js"></script>
+</body>
+</html>
